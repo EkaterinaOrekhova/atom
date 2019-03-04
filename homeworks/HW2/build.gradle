@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+    id 'checkstyle'
+}
+
+group 'ru.example'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+checkstyle {
+    ignoreFailures = false
+    toolVersion = '7.5'
+    configFile = new File('../../config/checkstyle/checkstyle.xml')
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
