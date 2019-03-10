@@ -1,0 +1,30 @@
+мар 10, 2019 2:20:51 PM ru.example.BullsAndCows main
+INFO: Logger started!
+мар 10, 2019 2:20:51 PM ru.example.BullsAndCows playGame
+INFO: I offered a 5-letter word, your guess?
+мар 10, 2019 2:21:17 PM ru.example.BullsAndCows playGame
+INFO: Wrong word length! Launch a new game!
+мар 10, 2019 2:21:17 PM ru.example.BullsAndCows playGame
+INFO: I offered a 5-letter word, your guess?
+мар 10, 2019 2:21:32 PM ru.example.BullsAndCows playGame
+INFO: Bulls: 0;  Cows: 1
+мар 10, 2019 2:21:43 PM ru.example.BullsAndCows playGame
+INFO: Bulls: 1;  Cows: 0
+мар 10, 2019 2:22:23 PM ru.example.BullsAndCows playGame
+INFO: Bulls: 0;  Cows: 1
+мар 10, 2019 2:22:29 PM ru.example.BullsAndCows playGame
+INFO: Bulls: 0;  Cows: 3
+мар 10, 2019 2:22:31 PM ru.example.BullsAndCows playGame
+INFO: Bulls: 0;  Cows: 1
+мар 10, 2019 2:22:34 PM ru.example.BullsAndCows playGame
+INFO: Bulls: 0;  Cows: 0
+мар 10, 2019 2:22:36 PM ru.example.BullsAndCows playGame
+INFO: Bulls: 0;  Cows: 0
+мар 10, 2019 2:22:39 PM ru.example.BullsAndCows playGame
+INFO: Bulls: 1;  Cows: 1
+мар 10, 2019 2:22:41 PM ru.example.BullsAndCows playGame
+INFO: Bulls: 0;  Cows: 0
+мар 10, 2019 2:22:46 PM ru.example.BullsAndCows playGame
+INFO: Bulls: 1;  Cows: 0
+мар 10, 2019 2:22:46 PM ru.example.BullsAndCows playGame
+INFO: You lose! Word is: dukes
