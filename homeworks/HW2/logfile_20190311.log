@@ -1,0 +1,26 @@
+мар 11, 2019 9:24:55 PM ru.example.BullsAndCows main
+INFO: Logger started!
+мар 11, 2019 9:24:55 PM ru.example.BullsAndCows playGame
+INFO: I offered a 5-letter word, your guess?
+мар 11, 2019 9:24:59 PM ru.example.BullsAndCows playGame
+INFO: Bulls: 0;  Cows: 1
+мар 11, 2019 9:25:04 PM ru.example.BullsAndCows playGame
+INFO: Bulls: 1;  Cows: 1
+мар 11, 2019 9:25:06 PM ru.example.BullsAndCows playGame
+INFO: Bulls: 1;  Cows: 4
+мар 11, 2019 9:25:09 PM ru.example.BullsAndCows playGame
+INFO: Bulls: 0;  Cows: 2
+мар 11, 2019 9:25:11 PM ru.example.BullsAndCows playGame
+INFO: Bulls: 0;  Cows: 1
+мар 11, 2019 9:25:13 PM ru.example.BullsAndCows playGame
+INFO: Bulls: 0;  Cows: 0
+мар 11, 2019 9:25:15 PM ru.example.BullsAndCows playGame
+INFO: Bulls: 1;  Cows: 1
+мар 11, 2019 9:25:17 PM ru.example.BullsAndCows playGame
+INFO: Bulls: 0;  Cows: 1
+мар 11, 2019 9:25:19 PM ru.example.BullsAndCows playGame
+INFO: Bulls: 0;  Cows: 1
+мар 11, 2019 9:25:21 PM ru.example.BullsAndCows playGame
+INFO: Bulls: 0;  Cows: 0
+мар 11, 2019 9:25:21 PM ru.example.BullsAndCows playGame
+INFO: You lose! Word is: iulus

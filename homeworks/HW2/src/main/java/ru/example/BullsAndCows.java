@@ -49,10 +49,11 @@ public class BullsAndCows {
         Scanner in = new Scanner(System.in);
         int[] bullsAndCows;
         String userSting = "";
-        Random Random = new Random();
+
         int countOfAttempt = 10;
+
         //String word = "java";     //для тестирования
-        String word = getWordFromFile(Random.nextInt(52976));
+        String word = getWordFromFile("dictionary.txt");
 
         //System.out.println("I offered a " + word.length() + "-letter word, your guess?");
         LOGGER.info("I offered a " + word.length() + "-letter word, your guess?");
@@ -93,12 +94,13 @@ public class BullsAndCows {
         return false;
     }
 
-    public static String getWordFromFile(int rand) {
+    public static String getWordFromFile(String fileName) {
 
+        Random Random = new Random();
         ArrayList<String> list = new ArrayList<>();
         String str = "";
 
-        try (BufferedReader reader = new BufferedReader(new FileReader("dictionary.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             while ((str = reader.readLine()) != null) {
                 if (!str.isEmpty()) {
                     list.add(str);
@@ -108,8 +110,7 @@ public class BullsAndCows {
             System.out.println("Error reading file!");
         }
 
-        str = list.get(rand);
-
+        str = list.get(Random.nextInt(list.size()));
         return str;
     }
 

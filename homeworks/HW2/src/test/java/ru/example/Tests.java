@@ -1,6 +1,7 @@
 package ru.example;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 
 import org.junit.Test;
 
@@ -8,7 +9,7 @@ public class Tests {
 
     @Test
     public void getWordFromFile() throws Exception {
-        assertEquals("aaliis", BullsAndCows.getWordFromFile(4));
+        assertNotNull(BullsAndCows.getWordFromFile("dictionary.txt"));
     }
 
     @Test
