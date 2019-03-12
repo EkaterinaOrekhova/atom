@@ -1,11 +1,12 @@
 package ru.example;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Random;
 import java.util.ArrayList;
-import java.io.*;
 import java.util.Scanner;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -33,8 +34,7 @@ public class BullsAndCows {
 
             do {
                 flag = playGame();
-            }
-            while (flag);
+            } while (flag);
 
         } catch (SecurityException e) {
             e.printStackTrace();
@@ -96,7 +96,7 @@ public class BullsAndCows {
 
     public static String getWordFromFile(String fileName) {
 
-        Random Random = new Random();
+        Random random = new Random(System.currentTimeMillis());
         ArrayList<String> list = new ArrayList<>();
         String str = "";
 
@@ -110,7 +110,7 @@ public class BullsAndCows {
             System.out.println("Error reading file!");
         }
 
-        str = list.get(Random.nextInt(list.size()));
+        str = list.get(random.nextInt(list.size()));
         return str;
     }
 
