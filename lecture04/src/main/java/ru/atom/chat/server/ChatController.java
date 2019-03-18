@@ -115,11 +115,10 @@ public class ChatController {
     public ResponseEntity deleteMsg() {
         String responseBody;
 
-        if (messages.size() > 0){
+        if (messages.size() > 0) {
             messages.clear();
             responseBody = String.join("\n", "Chat is clear");
-        }
-        else{
+        } else {
             responseBody = String.join("\n", "No messages to delete");
         }
         return ResponseEntity.ok(responseBody);
@@ -139,7 +138,7 @@ public class ChatController {
         if (!usersOnline.containsKey(name)) {
             return ResponseEntity.badRequest().body("User doesn't log in");
         }
-        if (messages.size() == 0){
+        if (messages.size() == 0) {
             return ResponseEntity.badRequest().body("No messages to quote");
         }
         messages.add("[" + name + "] " + msg + " -> quote \"" + messages.getLast() + "\"");
