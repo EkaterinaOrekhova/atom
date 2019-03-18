@@ -86,7 +86,7 @@ public class ChatClient {
         MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
         Request request = new Request.Builder()
             .post(RequestBody.create(mediaType, "msg='" + msg + "'"))
-            .url(PROTOCOL + HOST + PORT + "/chat/say?name=" + name)
+            .url(PROTOCOL + HOST + PORT + "/chat/quote?name=" + name)
             .build();
 
         return client.newCall(request).execute();

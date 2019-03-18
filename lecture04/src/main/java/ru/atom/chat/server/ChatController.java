@@ -40,7 +40,7 @@ public class ChatController {
             return ResponseEntity.badRequest().body("Too long name, sorry :(");
         }
         if (usersOnline.containsKey(name)) {
-            return ResponseEntity.badRequest().body("Already logged in:(");
+            return ResponseEntity.badRequest().body("Already logged in :(");
         }
         usersOnline.put(name, name);
         messages.add("[" + name + "] logged in");
@@ -72,7 +72,7 @@ public class ChatController {
             messages.add("[" + name + "] logged out");
             return ResponseEntity.ok().build();
         }
-        return ResponseEntity.badRequest().body("User already logged out :(");
+        return ResponseEntity.badRequest().body("User already logged out");
     }
 
     /**
@@ -87,7 +87,7 @@ public class ChatController {
             messages.add("[" + name + "] " + msg);
             return ResponseEntity.ok().build();
         }
-        return ResponseEntity.badRequest().body("User didn't log in :(");
+        return ResponseEntity.badRequest().body("User doesn't log in");
     }
 
 
@@ -116,11 +116,11 @@ public class ChatController {
         String responseBody;
 
         if (messages.size() > 0){
-            responseBody = String.join("\n", "We delete " + messages.size() + " messages");
             messages.clear();
+            responseBody = String.join("\n", "Chat is clear");
         }
         else{
-            responseBody = String.join("\n", "No messages");
+            responseBody = String.join("\n", "No messages to delete");
         }
         return ResponseEntity.ok(responseBody);
     }
@@ -128,19 +128,21 @@ public class ChatController {
 
     /**
      * curl -X POST -i localhost:8080/chat/quote -d "name=I_AM_STUPID&msg=I quote last message"
+     * цитирование последнего сообщения и добавление своего комментария
      */
     @RequestMapping(
         path = "quote",
         method = RequestMethod.POST,
         produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity quote(@RequestParam("name") String name, @RequestParam("msg") String msg) {
+
         if (!usersOnline.containsKey(name)) {
-            return ResponseEntity.badRequest().body("User doesn't log in :(");
+            return ResponseEntity.badRequest().body("User doesn't log in");
         }
         if (messages.size() == 0){
-            return ResponseEntity.badRequest().body("No messages :(");
+            return ResponseEntity.badRequest().body("No messages to quote");
         }
-        messages.add("[" + name + "]" + msg + " quote \"" + messages.getLast() + "\"");
+        messages.add("[" + name + "] " + msg + " -> quote \"" + messages.getLast() + "\"");
         return ResponseEntity.ok().build();
     }
 }
