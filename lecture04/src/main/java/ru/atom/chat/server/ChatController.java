@@ -9,16 +9,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.util.Arrays;
+import java.util.Deque;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("chat")
 public class ChatController {
-    private Queue<String> messages = new ConcurrentLinkedQueue<>();
+    private Deque<String> messages = new ConcurrentLinkedDeque<>();
     private Map<String, String> usersOnline = new ConcurrentHashMap<>();
 
     /**
@@ -59,16 +62,85 @@ public class ChatController {
     /**
      * curl -X POST -i localhost:8080/chat/logout -d "name=I_AM_STUPID"
      */
-    //TODO
+    @RequestMapping(
+        path = "logout",
+        method = RequestMethod.POST,
+        produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity logout(@RequestParam("name") String name) {
+        if (usersOnline.containsKey(name)) {
+            usersOnline.remove(name, name);
+            messages.add("[" + name + "] logged out");
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().body("User already logged out :(");
+    }
 
     /**
      * curl -X POST -i localhost:8080/chat/say -d "name=I_AM_STUPID&msg=Hello everyone in this chat"
      */
-    //TODO
+    @RequestMapping(
+        path = "say",
+        method = RequestMethod.POST,
+        produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity say(@RequestParam("name") String name, @RequestParam("msg") String msg) {
+        if (usersOnline.containsKey(name)) {
+            messages.add("[" + name + "] " + msg);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().body("User didn't log in :(");
+    }
 
 
     /**
      * curl -i localhost:8080/chat/chat
      */
-    //TODO
+    @RequestMapping(
+        path = "chat",
+        method = RequestMethod.GET,
+        produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity chat() {
+        String responseBody = String.join("\n", messages);
+        return ResponseEntity.ok(responseBody);
+    }
+
+
+    /**
+     * curl -i localhost:8080/chat/deleteMsg
+     * Очистить все сообщения в чате
+     */
+    @RequestMapping(
+        path = "deleteMsg",
+        method = RequestMethod.GET,
+        produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity deleteMsg() {
+        String responseBody;
+
+        if (messages.size() > 0){
+            responseBody = String.join("\n", "We delete " + messages.size() + " messages");
+            messages.clear();
+        }
+        else{
+            responseBody = String.join("\n", "No messages");
+        }
+        return ResponseEntity.ok(responseBody);
+    }
+
+
+    /**
+     * curl -X POST -i localhost:8080/chat/quote -d "name=I_AM_STUPID&msg=I quote last message"
+     */
+    @RequestMapping(
+        path = "quote",
+        method = RequestMethod.POST,
+        produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity quote(@RequestParam("name") String name, @RequestParam("msg") String msg) {
+        if (!usersOnline.containsKey(name)) {
+            return ResponseEntity.badRequest().body("User doesn't log in :(");
+        }
+        if (messages.size() == 0){
+            return ResponseEntity.badRequest().body("No messages :(");
+        }
+        messages.add("[" + name + "]" + msg + " quote \"" + messages.getLast() + "\"");
+        return ResponseEntity.ok().build();
+    }
 }
