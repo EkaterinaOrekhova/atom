@@ -70,10 +70,10 @@ public class ChatClient {
         return client.newCall(request).execute();
     }
 
-    //GET host:port/chat/deleteMsg
+    //DELETE host:port/chat/deleteMsg
     public static Response deleteMsg() throws IOException {
         Request request = new Request.Builder()
-            .get()
+            .delete()
             .url(PROTOCOL + HOST + PORT + "/chat/deleteMsg")
             .addHeader("host", HOST + PORT)
             .build();
