@@ -1,44 +1,53 @@
-:root {
-    background: #336666;
+.msginput, .sendbutton {
+    font-size: medium;
 }
 
-.chat {
-    background: #99CCCC;
-    font-family: "Courier New", Courier, monospace;
-    padding: 7px;
-    margin: 0 0 1em;
-    overflow: auto;
+/* сверху | справа | снизу | слева */
+
+.mainDiv {
+    margin: 5vh 5vw 0 5vw !important;
 }
 
-.form {
-    height: 85%;
+#name {
+    margin-left: 10px;
 }
 
-.msginput {
-    width: 80%;
+#nameform {
+    margin-right: 20px;
 }
 
-.sendbutton {
-    width: 15%;
+#listOfUsers {
+    height: 70vh;
 }
 
-#header {
-    background: #336666;
-    padding: 10px;
-    padding-bottom: 0;
+#history {
+    height: 62vh; 
 }
 
-#body {
-    padding: 10px;
-    padding-top: 0;
-    padding-bottom: 30px; /* Height of the footer */
+.myListStyle {
+    background: #AEA79F linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7));
+    padding: 1% ;  
+    overflow: scroll;
+    margin-bottom: 1vh;
 }
 
-#footer {
-    padding: 10px;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 30px; /* Height of the footer */
-    background: #336666;
+#footer{
+    display: inline;
+}
+
+#msg {
+    width: 34vw;
+}
+
+#nameForMsg {
+    width: 15vw;
+}
+
+.myBtnStyle{
+    font-size: 22px !important; 
+    color: #E95420 !important;
+}
+
+.myBtnStyle:hover{
+    color: rgb(155, 41, 0) !important;
 }

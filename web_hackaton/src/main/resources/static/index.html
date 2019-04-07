@@ -1,22 +1,55 @@
-<head>
-    <link rel="stylesheet" type="text/css" href="styles.css">
-</head>
+<!DOCTYPE html>
 <html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="styles.css"/>
+        <link rel="stylesheet" href="https://bootswatch.com/4/united/bootstrap.min.css"/>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    </head>
 <body>
-<div id="header">
-    <form method="POST" id="nameform" action="javascript:void(null);" onsubmit="login()">
-        <input id="name" name="name" value="" style="font-size:medium" type="text">
-        <input value="Login" style="font-size:large" type="submit">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">Chat Lab4</a>
+    <ul class="navbar-nav mr-auto"></ul>
+    <form method="POST" id="nameform" class="form-inline my-2 my-lg-0" 
+    action="javascript:void(null);" onsubmit="login()">
+        <input id="name" name="name" class="form-control mr-sm-2" type="text" placeholder="Login...">
+        <input value="Login" class="btn btn-secondary my-2 my-sm-0" type="submit"></input>
     </form>
-</div>
-<div id="body">
-    <div id="history" class="chat form"></div>
-</div>
-<div id="footer">
-    <form method="POST" id="msgform" action="javascript:void(null);" onsubmit="say()">
-        <input id="msg" name="msg" class="msginput" value="" style="font-size:medium" type="text">
-        <input value="Send" class="sendbutton" style="font-size:large" type="submit">
+    <form method="POST" id="nameform2" class="form-inline my-2 my-lg-0" 
+    action="javascript:void(null);" onsubmit="logout()">
+        <input id="" name="name" class="form-control mr-sm-2" type="text" placeholder="Logout...">
+        <input value="Logout" class="btn btn-secondary my-2 my-sm-0" type="submit"></input>
     </form>
+</nav>
+<div class="mainDiv row">
+    <div class="col-4">
+        <h3>List of online users</h3>
+
+        <div class="myListStyle">
+            <div id="listOfUsers"></div> 
+        </div>          
+    </div>
+    <div class="col-8">
+        <div class="form-inline"> 
+            <h3>Chat history</h3>
+            <ul class="navbar-nav mr-auto"></ul>
+            <div>
+                <button onclick="importHistory()" class="myBtnStyle btn fas fa-file-download"></button>
+                <button onclick="saveHistory()" class="myBtnStyle btn fas fa-save"></button>
+                <button onclick="deleteHistory()" class="myBtnStyle btn fas fa-trash"></button>
+            </div>         
+        </div>
+        
+        <div class="myListStyle">
+            <div id="history"></div>
+        </div>      
+        <div id="footer">
+            <form class="form-inline my-2 my-lg-0" method="POST" id="msgform" action="javascript:void(null);" onsubmit="say()">
+                <input id="nameForMsg" name="name" class="form-control mr-sm-2" type="text" placeholder="Login...">
+                <input id="msg" name="msg" class="form-control mr-sm-2" type="text" placeholder="Message...">
+                <input value="Send" class="btn btn-secondary my-2 my-sm-0" type="submit">
+            </form>
+        </div>
+    </div>  
 </div>
 </body>
 </html>
@@ -25,7 +58,6 @@
 <script>
     var host = "localhost";
     var port = 8080;
-
 
     function loadHistory() {
         var settings = {
@@ -42,15 +74,29 @@
         });
     }
 
+    function loadListOfUsers() {
+        var settings = {
+            "crossDomain": true,
+            "url": "http://" + host + ":" + port + "/chat/online",
+            "method": "GET",
+        }
+
+        $.ajax(settings).done(function (response) {
+            $("#listOfUsers").html(response.replace(/\n/g, "<br />"))
+            $("#listOfUsers").scrollTop($("#listOfUsers")[0].scrollHeight);
+        }).fail(function (jqXHR, textStatus) {
+            console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
+        });
+    }
+
     function say() {
         var msg = $('#msgform').serialize();
-        var name = $('#nameform').serialize();
 
         var settings = {
             "method": "POST",
             "crossDomain": true,
             "url": "http://" + host + ":" + port + "/chat/say",
-            "data": name + "&" + msg
+            "data": msg
         };
 
         $.ajax(settings).done(function (response) {
@@ -73,13 +119,80 @@
         };
 
         $.ajax(settings).done(function (response) {
+            $('#nameform').trigger("reset");
             loadHistory();
+            loadListOfUsers();
         }).fail(function (jqXHR, textStatus) {
             alert(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
             console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
         });
     }
 
-    loadHistory();
-    setInterval(loadHistory, 10000);
+    function logout() {
+        var name = $('#nameform2').serialize();
+        var settings = {
+            "method": "POST",
+            "crossDomain": true,
+            "url": "http://" + host + ":" + port + "/chat/logout",
+            "data": name
+        };
+        $.ajax(settings).done(function (response) {
+            $('#nameform2').trigger("reset");
+            loadHistory();
+            loadListOfUsers();
+        }).fail(function (jqXHR, textStatus) {
+            alert(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
+            console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
+        });
+    }
+
+    function deleteHistory(){
+        var settings = {
+            "crossDomain": true,
+            "url": "http://" + host + ":" + port + "/chat/deleteMsg",
+            "method": "DELETE",
+        }
+
+        $.ajax(settings).done(function (response) {
+            loadHistory();
+            alert(response);
+        }).fail(function (jqXHR, textStatus) {
+            console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
+        });  
+    }
+
+    function saveHistory(){
+        var settings = {
+            "crossDomain": true,
+            "url": "http://" + host + ":" + port + "/chat/saveMsg",
+            "method": "GET",
+        }
+
+        $.ajax(settings).done(function (response) {
+            alert(response);
+        }).fail(function (jqXHR, textStatus) {
+            console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
+        });  
+    }
+
+    function importHistory(){
+        var settings = {
+            "crossDomain": true,
+            "url": "http://" + host + ":" + port + "/chat/loadMsg",
+            "method": "POST",
+        }
+
+        $.ajax(settings).done(function (response) {
+            loadHistory();
+            alert(response);
+        }).fail(function (jqXHR, textStatus) {
+            console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
+        });  
+    }
+
+    setInterval(function() {
+        loadHistory();
+        loadListOfUsers();
+    }, 10000);
+
 </script>
