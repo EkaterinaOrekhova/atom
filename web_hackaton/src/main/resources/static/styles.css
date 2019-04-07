@@ -48,6 +48,10 @@
     color: #E95420 !important;
 }
 
-.myBtnStyle:hover{
-    color: rgb(155, 41, 0) !important;
+.myBtnStyle:hover {
+    color: rgb(155, 41, 0) !important;  
+}
+
+.myBtnStyle:active, .myBtnStyle:focus {
+    box-shadow: none !important;
 }

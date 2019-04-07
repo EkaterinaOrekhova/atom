@@ -103,6 +103,8 @@
             $('#msgform').trigger("reset");
             loadHistory();
         }).fail(function (jqXHR, textStatus) {
+            loadHistory();
+            loadListOfUsers();
             alert(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
             console.log(jqXHR.status + " " + jqXHR.statusText + ". " + jqXHR.responseText);
         });

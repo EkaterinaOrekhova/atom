@@ -1,3 +1,4 @@
-Sun, 7 Apr 18:56:51 [Handshake] logged in
-Sun, 7 Apr 18:56:58 [Handshake]: dg
-Sun, 7 Apr 19:21:50 [Handshake2] logged in
+Sun, 7 Apr 21:38:03 [Handshake] logged in
+Sun, 7 Apr 21:38:09 [mazova] logged in
+Sun, 7 Apr 21:38:11 [mazova]: Hello everyone
+User [mazova] is spammer! You are logout!

@@ -23,35 +23,79 @@ public class ChatClientTest {
     private static String MY_MESSAGE_TO_CHAT = "KILL_ME_SOMEONE";
 
     @Test
-    public void login() throws IOException {
-        Response response = ChatClient.login(MY_NAME_IN_CHAT);
-        log.info("[" + response + "]");
+    public void viewChat() throws IOException {
+        ChatClient.login(MY_NAME_IN_CHAT);
+        ChatClient.say(MY_NAME_IN_CHAT, MY_MESSAGE_TO_CHAT);
+        Response response = ChatClient.viewChat();
+        System.out.println("[" + response + "]");
         String body = response.body().string();
-        log.info(body);
-        Assert.assertTrue(response.code() == 200 || body.equals("Already logged in:("));
+        Assert.assertNotEquals(0, body.length());
+
+        ChatClient.logout(MY_NAME_IN_CHAT);
+        ChatClient.deleteMsg();
     }
 
     @Test
-    public void viewChat() throws IOException {
-        Response response = ChatClient.viewChat();
-        log.info("[" + response + "]");
-        log.info(response.body().string());
-        Assert.assertEquals(200, response.code());
+    public void login() throws IOException {
+        Response response = ChatClient.login(MY_NAME_IN_CHAT);
+        System.out.println("[" + response + "]");
+        String body = response.body().string();
+        ChatClient.deleteMsg();
+        Assert.assertTrue(response.code() == 200 || body.equals("User already logged in"));
+
+        ChatClient.logout(MY_NAME_IN_CHAT);
+        ChatClient.deleteMsg();
     }
 
-    /*@Test//TODO FIX
+    @Test
     public void viewOnline() throws IOException {
         Response response = ChatClient.viewOnline();
-        log.info("[" + response + "]");
-        log.info(response.body().toString());
+        System.out.println("[" + response + "]");
+        System.out.println(response.body().string());
+        ChatClient.deleteMsg();
         Assert.assertEquals(200, response.code());
-    }*/
 
-    /*@Test//TODO FIX
+        ChatClient.logout(MY_NAME_IN_CHAT);
+        ChatClient.deleteMsg();
+    }
+
+    @Test
     public void say() throws IOException {
-        Response response = ChatClient.say(MY_NAME_IN_CHAT, MY_MESSAGE_TO_CHAT);
-        log.info("[" + response + "]");
-        log.info(response.body().string());
+        ChatClient.login(MY_NAME_IN_CHAT);
+        ChatClient.say(MY_NAME_IN_CHAT, MY_MESSAGE_TO_CHAT);
+        Response response =  ChatClient.say(MY_NAME_IN_CHAT, MY_MESSAGE_TO_CHAT);
+        System.out.println("[" + response + "]");
+        String body = response.body().string();
+        ChatClient.deleteMsg();
+        Assert.assertTrue(body.contains("User [" + MY_NAME_IN_CHAT + "] is spammer! You are logout!"));
+
+        ChatClient.logout(MY_NAME_IN_CHAT);
+        ChatClient.deleteMsg();
+    }
+
+    @Test
+    public void logout() throws IOException {
+        ChatClient.login(MY_NAME_IN_CHAT);
+        Response response = ChatClient.logout(MY_NAME_IN_CHAT);
+        System.out.println("[" + response + "]");
+        System.out.println(response.body().string());
         Assert.assertEquals(200, response.code());
-    }*/
+
+        ChatClient.logout(MY_NAME_IN_CHAT);
+        ChatClient.deleteMsg();
+    }
+
+    @Test
+    public void deleteMsg() throws IOException {
+        ChatClient.login(MY_NAME_IN_CHAT);
+        ChatClient.say(MY_NAME_IN_CHAT, MY_MESSAGE_TO_CHAT);
+        Response response = ChatClient.deleteMsg();
+        System.out.println("[" + response + "]");
+        String body = response.body().string();
+        Assert.assertEquals("Chat is clear", body);
+
+        ChatClient.logout(MY_NAME_IN_CHAT);
+        ChatClient.deleteMsg();
+    }
+
 }

@@ -21,6 +21,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.text.SimpleDateFormat;
 import java.io.BufferedReader;
@@ -110,10 +112,39 @@ public class ChatController {
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity say(@RequestParam("name") String name, @RequestParam("msg") String msg) {
+
+        String str = "";
+        String [] tokens = {""};
+        Pattern pattern = Pattern.compile("\\[.+\\]");
+        Matcher matcher = pattern.matcher(messages.getLast());
+        boolean flag = true;
+
         if (usersOnline.containsKey(name)) {
-            messages.add(new SimpleDateFormat("EEE, d MMM HH:mm:ss",
-                Locale.ENGLISH).format(new Date()) + " [" + name + "]: " + msg);
-            return ResponseEntity.ok().build();
+
+            if (messages.size() != 0) {
+                while (matcher.find()) {
+                    str = messages.getLast().substring(matcher.start() + 1, matcher.end() - 1);
+                }
+
+                if (messages.getLast().contains("]:")) {
+                    tokens = messages.getLast().split("]: ");
+                }
+
+                if (str.equals(name) && tokens[tokens.length - 1].equals(msg)) {
+                    flag = false;
+                }
+            }
+
+            if (flag) {
+                messages.add(new SimpleDateFormat("EEE, d MMM HH:mm:ss",
+                    Locale.ENGLISH).format(new Date()) + " [" + name + "]: " + msg);
+                return ResponseEntity.ok().build();
+            } else {
+                usersOnline.remove(name, name);
+                messages.add(new SimpleDateFormat("EEE, d MMM HH:mm:ss",
+                    Locale.ENGLISH).format(new Date()) + " [" + name + "] is spammer! You are logout!");
+                return ResponseEntity.badRequest().body("User [" + name + "] is spammer! You are logout!");
+            }
         }
         return ResponseEntity.badRequest().body("User doesn't log in");
     }
