@@ -2,6 +2,7 @@ package ru.atom.chat;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +16,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Date;
-import java.util.Deque;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.regex.Matcher;
@@ -26,6 +24,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.text.SimpleDateFormat;
 import java.io.BufferedReader;
+import ru.atom.chat.model.User;
+import ru.atom.chat.service.ChatService;
 
 @Controller
 @RequestMapping("chat")
@@ -34,6 +34,9 @@ public class ChatController {
     File file = new File("chathistory.txt");
     private Deque<String> messages = new ConcurrentLinkedDeque<>();
     private Map<String, String> usersOnline = new ConcurrentHashMap<>();
+
+    @Autowired
+    private ChatService chatService;
 
     /**
      * curl -X POST -i localhost:8080/chat/login -d "name=I_AM_STUPID"
@@ -56,6 +59,9 @@ public class ChatController {
         usersOnline.put(name, name);
         messages.add(new SimpleDateFormat("EEE, d MMM HH:mm:ss",
             Locale.ENGLISH).format(new Date()) + " [" + name + "] logged in");
+
+        chatService.login(name);
+
         return ResponseEntity.ok().build();
 
     }
@@ -80,8 +86,15 @@ public class ChatController {
             method = RequestMethod.GET,
             produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity online() {
-        String responseBody = String.join("\n", usersOnline.keySet().stream().sorted().collect(Collectors.toList()));
-        return ResponseEntity.ok(responseBody);
+        List<User> online = chatService.getOnlineUsers();
+
+        String responseBody = online.stream()
+            .map(User::getLogin)
+            .collect(Collectors.joining("\n"));
+        return ResponseEntity.ok().body(responseBody);
+
+        //String responseBody = String.join("\n", usersOnline.keySet().stream().sorted().collect(Collectors.toList()));
+        //return ResponseEntity.ok(responseBody);
     }
 
     /**
