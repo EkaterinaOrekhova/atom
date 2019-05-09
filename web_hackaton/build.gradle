@@ -6,12 +6,11 @@ repositories {
     mavenCentral()
 }
 
+apply plugin: 'application'
+mainClassName = 'ru.atom.chat.ChatApplication'
 jar {
-    manifest {
-        attributes(
-                'Main-Class': 'ru.atom.chat.ChatApplication'
-        )
-    }
+    baseName = 'kateApp'
+    version = '0.1.0' //Какая хочешь, может быть версия 
 }
 
 apply plugin: 'java'
