@@ -70,7 +70,7 @@ public class ChatService {
     public String getChat() {
         String res = "";
         for (Message message : messageDao.findAll()) {
-            res = res + "[" + message.getUser().getLogin() + "]: " + message.getValue() + "\n";
+            res = res + message.getTime() + " [" + message.getUser().getLogin() + "]: " + message.getValue() + "\n";
         }
         return res;
     }

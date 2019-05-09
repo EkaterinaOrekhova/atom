@@ -69,13 +69,4 @@ public class ChatClient {
         return client.newCall(request).execute();
     }
 
-    //DELETE host:port/chat/deleteMsg
-    public static Response deleteMsg() throws IOException {
-        Request request = new Request.Builder()
-            .delete()
-            .url(PROTOCOL + HOST + PORT + "/chat/deleteMsg")
-            .addHeader("host", HOST + PORT)
-            .build();
-        return client.newCall(request).execute();
-    }
 }
