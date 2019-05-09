@@ -6,6 +6,14 @@ repositories {
     mavenCentral()
 }
 
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'ru.atom.chat.ChatApplication'
+        )
+    }
+}
+
 apply plugin: 'java'
 apply plugin: 'checkstyle'
 
