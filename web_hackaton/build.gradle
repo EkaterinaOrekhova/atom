@@ -27,7 +27,7 @@ task ("sql") << {
     }
     Class driver = loader.loadClass("org.postgresql.Driver")
     groovy.sql.Sql sql = groovy.sql.Sql.newInstance(
-            'jdbc:postgresql://localhost:5433/postgres',
+            'jdbc:postgresql://localhost:5432/postgres',
             'postgres',
             '1234',
             'org.postgresql.Driver'
