@@ -1,3 +1,9 @@
+buildscript {
+    dependencies {
+        classpath 'org.postgresql:postgresql:9.2-1003-jdbc4'
+    }
+}
+
 plugins {
     id 'org.springframework.boot' version '2.0.0.RELEASE'
 }
@@ -7,16 +13,41 @@ repositories {
 }
 
 apply plugin: 'application'
+
 mainClassName = 'ru.atom.chat.ChatApplication'
 jar {
     baseName = 'kateApp'
-    version = '0.1.0' //Какая хочешь, может быть версия 
+    version = '0.1.0' //Какая хочешь, может быть версия
+}
+
+task ("sql") << {
+    URLClassLoader loader = GroovyObject.class.classLoader as URLClassLoader
+    configurations.driver.each {
+        File file -> loader.addURL(file.toURI().toURL())
+    }
+    Class driver = loader.loadClass("org.postgresql.Driver")
+    groovy.sql.Sql sql = groovy.sql.Sql.newInstance(
+            'jdbc:postgresql://localhost:5433/postgres',
+            'postgres',
+            '1234',
+            'org.postgresql.Driver'
+    )
+    FileTree tree = null
+    //create database
+    fileTree(dir: 'src/main/resources/sql/schema', include: "chat-schema.sql").each {
+        sql.execute(it.text)
+    }
 }
 
 apply plugin: 'java'
 apply plugin: 'checkstyle'
 
+configurations {
+    driver
+}
+
 dependencies {
+    driver 'org.postgresql:postgresql:9.2-1003-jdbc4'
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
